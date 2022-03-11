@@ -44,10 +44,10 @@ def main():
         data.columns = ['date', 'pop']
         data['net'] = data['pop'].diff(1)
         data['net normal'] = data['net'] / data['net'].abs().max()
-        data['percent pop'] = (data['pop'] / data['pop'].iat[0] - 1) * 100
         data['date'] = pd.to_datetime(data['date'], format='%Y-%m-%d').dt.year
         data['Region'] = county
         data = data.reset_index()
+        data = data[data.date > 2000]
 
         county = prices[prices['RegionName'].str.contains(county)]
         county = county.drop(columns=['RegionID', 'SizeRank', 'RegionType', 'StateName'])
@@ -61,7 +61,7 @@ def main():
         county['percent value'] = (county['value'] / county['value'].iat[0] - 1) * 100
 
 
-
+        data['percent pop'] = (data['pop'] / data['pop'].iat[0] - 1) * 100
         data = data.merge(county, left_on=['date'], right_on=['date'], how='inner')
 
         populations.append(data)
