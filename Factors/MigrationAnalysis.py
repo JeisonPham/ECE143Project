@@ -258,22 +258,5 @@ def main():
     plt.show()
 
 
-    # In[38]:
-
-
-    net = pd.pivot_table(pop[['net', 'Region']], index='date', columns='Region', values=['net'])
-    net.columns = net.columns.get_level_values(1)
-    net
-
-
-    # In[ ]:
-
-
-    net.corrwith(price)
-
-
-    # In[ ]:
-
-
 
 
