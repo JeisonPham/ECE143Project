@@ -9,6 +9,7 @@
 * ImageMagick was used to convert images to gif
 * Quandl for pulling data from zillow
 * openpyxl for reading excel
+* python 3.7 for Geoplot/Geopandas
 
 ### How to Run:
 Main code is found in file: Final Notebook.ipynb
