@@ -15,28 +15,10 @@ import os
 sns.set_theme()
 
 def main():
-
-    # In[2]:
-
-
     files = glob(os.path.join(os.path.dirname(__file__), "Data/migration data/*.csv"))
-
-
-    # In[3]:
-
-
     files = list(filter(lambda x: "pop" in x, files))
-
-
-    # In[4]:
-
-
     prices = pd.read_csv(os.path.join(os.path.dirname(__file__), "Data/metro.csv"))
-
-
-    # In[20]:
-
-
+    
     populations = []
     counties = ['Boston', 'Denver', 'Los Angeles', 'McAllen', 'Merced', 'New York', 'San Diego', 'San Francisco', 'San Jose', 'St. Louis', 'Ventura', 'Wichita']
     for file, county in zip(files, counties):
@@ -69,19 +51,11 @@ def main():
     pop = pd.concat(populations).reset_index().dropna()
 
 
-    # In[21]:
-
-
     pop.dropna(inplace=True)
-    pop
-
-
-    # In[7]:
 
 
     counter = 0
     color = plt.cm.rainbow(np.linspace(0, 1, 15))
-    print(color)
     for date in sorted(pop.date.unique()):
         data = pop[pop.date == date]
         fig, ax = plt.subplots(figsize=(10, 10))
@@ -97,9 +71,6 @@ def main():
         counter += 1
 
 
-    # In[8]:
-
-
     fig, ax = plt.subplots(figsize=(20, 10))
     for region in pop.RegionName.unique():
         regions = pop[pop.RegionName == region]
@@ -109,8 +80,6 @@ def main():
     plt.ylabel("Years")
     plt.show()
 
-
-    # In[9]:
 
 
 
@@ -128,8 +97,6 @@ def main():
         plt.show()
 
 
-    # In[10]:
-
 
     fig, ax = plt.subplots(figsize=(10, 10))
     data = pop[['pop', 'net', 'value']]
@@ -142,28 +109,6 @@ def main():
     plt.show()
 
 
-    # In[11]:
-
-
-
-    # for date in pop.date.unique():
-    #     p = pop[pop.date == date]
-    #     fig, ax = plt.subplots(figsize=(10, 10))
-    #     for index, region in enumerate(p.Region.unique()):
-    #         data = p[p.Region == region]
-    #         ax.scatter(data['net normal'], data['price difference'], label=region, color=color[index], alpha=1)
-    #         ax.annotate(region, (data['net normal'], data['price difference']))
-    #     plt.title(f"Net Population Change vs Home Price Difference {date}")
-    #     plt.xlim([-1.1, 1.1])
-    #     plt.ylim([-1.1, 1.1])
-    #     plt.axvspan(0, 2, ymin=0, ymax=0.5, facecolor='g', alpha=0.3)
-    #     plt.axvspan(0, 2, ymin=0.5, ymax=1, facecolor='y', alpha=0.3)
-    #     plt.axvspan(-2, 0, ymin=0, ymax=0.5, facecolor='y', alpha=0.3)
-    #     plt.axvspan(-2, 0, ymin=0.5, ymax=1, facecolor='r', alpha=0.3)
-    #     plt.xlabel("Net Population")
-    #     plt.ylabel("Home Price")
-    #     plt.savefig(f"Migration Graphs/xy_{date}.png", bbox_inches='tight')
-    #     plt.show()
     for index, region in enumerate(pop.Region.unique()):
         fig, ax = plt.subplots(figsize=(10, 10))
         data = pop[pop.Region == region]
@@ -185,15 +130,6 @@ def main():
         plt.savefig(os.path.join(os.path.dirname(__file__), f"Migration Graphs/xy_{region}.png"), bbox_inches='tight')
         plt.show()
         plt.show()
-
-
-    # In[15]:
-
-
-    pop
-
-
-    # In[41]:
 
 
     from matplotlib.offsetbox import AnchoredText
@@ -225,29 +161,17 @@ def main():
             counter += 1
 
 
-    # In[42]:
-
-
     plot_bar_graph(pop)
 
 
-    # In[34]:
 
 
     long = pd.pivot_table(pop[['date','pop', 'Region']], index='date', columns='Region', values=['pop'])
     long.columns = long.columns.get_level_values(1)
-    long
-
-
-    # In[36]:
 
 
     price = pd.pivot_table(pop[['date','value', 'Region']], index='date', columns='Region', values=['value'])
     price.columns = price.columns.get_level_values(1)
-    price
-
-
-    # In[37]:
 
 
     corr = pd.DataFrame(price.corrwith(long))

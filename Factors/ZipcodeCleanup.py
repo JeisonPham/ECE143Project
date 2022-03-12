@@ -1,14 +1,9 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import os
+from uszipcode import SearchEngine
 
 sns.set_theme()
 
@@ -35,11 +30,13 @@ def main():
     investor['zipcode'] = investor.region.str.extract(r'(\d+)')
     investor.drop(columns=['region'], inplace=True)
 
-    from uszipcode import SearchEngine
+
     sr = SearchEngine()
     county = []
     for zip_code in investor.zipcode:
         z = sr.by_zipcode(zip_code)
         county.append(z.county)
+        
+    investor['county'] = county
 
     investor.to_csv(os.path.join(os.path.dirname(__file__), "Data/investor.csv"))

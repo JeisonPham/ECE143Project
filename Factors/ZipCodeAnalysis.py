@@ -103,10 +103,7 @@ def main():
     temp['Group 3'] = temp[['St. Louis', 'Denver', 'San Jose']].mean(axis=1)
     temp = temp[['San Diego', 'Group 1', 'Group 2', 'Group 3']].reset_index()
     temp = pd.melt(temp, id_vars=['date'], value_vars=['San Diego', 'Group 1', 'Group 2', 'Group 3'])
-    temp
 
-
-    # In[21]:
 
 
     fig, ax = plt.subplots(figsize=(20, 10))
@@ -119,9 +116,6 @@ def main():
     plt.ylabel("Ratio")
     plt.xlabel("Years")
     plt.show()
-
-
-    # In[12]:
 
 
     inv = pd.pivot(combined, index='date', columns='Region', values=['estimated_investor_purchase'])
@@ -137,18 +131,12 @@ def main():
     plt.show()
 
 
-# In[13]:
-
-
     import geopandas as gpd
     import geoplot as gplt
 
     # Load the json file with county coordinates
     geoData = gpd.read_file('https://raw.githubusercontent.com/OpenDataDE/State-zip-code-GeoJSON/master/ca_california_zip_codes_geo.min.json')
     geoData.ZCTA5CE10 = geoData.ZCTA5CE10.astype(str).astype(int)
-
-
-    # In[14]:
 
 
     investment = []
@@ -160,31 +148,17 @@ def main():
 
             investment.append(data)
     map_data = pd.concat(investment).reset_index()
-    map_data
-
-
-    # In[15]:
 
 
     temp = geoData.merge(map_data, left_on=geoData.ZCTA5CE10, right_on=map_data.zipcode, how='inner')
-    temp
-
-
-    # In[16]:
 
 
     gplt.polyplot(temp, figsize=(20,20))
 
-
-    # In[17]:
-
-
     import mapclassify as mc
     scheme = mc.Quantiles(temp['estimated_investor_purchase'] , k=5)
-    scheme
 
 
-    # In[18]:
 
 
     fig, ax = plt.subplots(figsize=(20, 20))
@@ -195,9 +169,6 @@ def main():
         edgecolor='black',
         ax=ax
     );
-
-
-    # In[ ]:
 
 
 

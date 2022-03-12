@@ -10,12 +10,10 @@ import os
 
 def main():
 
-   """
-   Code was originally created in a jupyter notebook
-   """
-
-
     def combine_data(Regions:list):
+        """
+        Combines region price data with median income
+        """
         df = pd.read_csv(os.path.join(os.path.dirname(__file__), 'Data/metro.csv'))
         counties = []
         for region in Regions:
@@ -37,8 +35,6 @@ def main():
             median_income = median_income[median_income['date'] > 2000]
             median_income['Median Income'] = median_income['Median Income'].astype(float)
 
-            print(median_income, region)
-
 
             ratio = county.merge(median_income, on='date', how='left')
             ratio['Region'] = region
@@ -56,21 +52,7 @@ def main():
         counties = pd.concat(counties).reset_index().drop(columns=['index'])
         return counties
 
-
-    # In[3]:
-
-
     combined = combine_data(['San Diego', 'Los Angeles', 'San Francisco', 'St. Louis', 'New York', 'Boston', "Youngstown", 'San Jose', 'Ventura', 'Denver'])
-    combined.to_csv("sanity.csv")
-
-
-    # In[4]:
-
-
-    combined[combined.Region == 'Denver']
-
-
-    # In[5]:
 
 
     def plot_bar_graph(df):
@@ -98,34 +80,9 @@ def main():
             plt.savefig(os.path.join(os.path.dirname(__file__), f"Median Income Graphs/{counter:03d}.png"), bbox_inches='tight')
             plt.show()
             counter += 1
-
-
-    # In[6]:
-
-
+            
     plot_bar_graph(combined)
-
-
-    # In[7]:
-
-
-    combined
-
-
-    # In[8]:
-
-
     combined['ratio'] = combined['value'] / combined['Median Income']
-
-
-    # In[41]:
-
-
-    combined[combined['date'] == 2001]
-
-
-    # In[35]:
-
 
     def group_values(df, values):
         temp =  pd.pivot_table(df, index='date', columns='Region', values=values)
@@ -136,31 +93,12 @@ def main():
         temp = pd.melt(temp, id_vars=['date'], value_vars=['San Diego', 'Group 1', 'Group 2', 'Group 3'])
         temp[values] = temp['value']
         return temp
-
-
-    # In[36]:
-
-
+    
     temp1 = group_values(combined, 'value_growth')
-
-
-    # In[37]:
-
-
     temp = group_values(combined, 'median_growth')
     plot_bar_graph(temp.merge(temp1, on=['date', 'Region']))
-
-
-    # In[38]:
-
-
     temp = group_values(combined, 'value').merge(group_values(combined, 'Median Income'), on=['date', 'Region'])
-    temp
-
-
-    # In[39]:
-
-
+    
     fig, ax = plt.subplots(figsize=(10, 10))
     temp['ratio'] = temp['value_x'] / temp['Median Income']
     for region in temp.Region.unique():
@@ -175,10 +113,6 @@ def main():
     plt.axvspan(2005, 2009, facecolor='g', alpha=0.2, label="Housing Market Crash")
     plt.axvspan(2019, 2021, facecolor='r', alpha=0.2, label='Covid')
     plt.show()
-
-
-    # In[ ]:
-
 
     fig, ax = plt.subplots(figsize=(20, 10))
     for region in combined.RegionName.unique():

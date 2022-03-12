@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[1]:
-
-
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
@@ -14,27 +8,13 @@ import os
 sns.set_theme()
 
 def main():
-    # In[2]:
-
 
     counties = ['Boston', 'Denver', 'Los Angeles', 'McAllen', 'Merced', 'New York', 'San Diego', 'San Francisco', 'San Jose', 'St. Louis', 'Ventura']
 
-
-    # In[3]:
-
-
     files = glob(os.path.join(os.path.dirname(__file__), "Data/inventory data/*"))
-    files
-
-
-    # In[4]:
 
 
     prices = pd.read_csv(os.path.join(os.path.dirname(__file__), "Data/metro.csv"))
-    prices
-
-
-    # In[5]:
 
 
     inventory = []
@@ -61,21 +41,7 @@ def main():
     pop = pd.concat(inventory).reset_index().dropna()
 
 
-    # In[6]:
-
-
-    pop
-
-
-    # In[7]:
-
-
     color = plt.cm.rainbow(np.linspace(0, 1, 15))
-
-
-    # In[8]:
-
-
     fig, ax = plt.subplots(figsize=(10, 10))
     for index, region in enumerate(pop.Region.unique()):
         data = pop[pop.Region == region]
@@ -85,9 +51,6 @@ def main():
     plt.legend()
     plt.axvspan(datetime(2020, 1, 1), datetime(2022, 1, 1), facecolor='black', alpha=0.2)
     plt.show()
-
-
-    # In[33]:
 
 
     group1 = ['New York', 'McAllen', 'Los Angeles', 'St. Louis']
@@ -106,23 +69,11 @@ def main():
         data = temp[temp.Region == region]
         data['date'] = pd.to_datetime(data['date'])
         ax.plot(data['date'], data['ratio'], label=region)
-    #     ax.annotate(region, (data.index.iloc[-1], data['ratio'].iloc[-1]))
     plt.legend()
     plt.title("Home Price to Inventory Ratio")
     plt.ylabel("Ratio")
     plt.xlabel("Year")
-    # plt.axvspan(datetime(2020, 1, 1), datetime(2022, 1, 1), facecolor='red', alpha=0.1)
     plt.show()
-
-
-    # In[ ]:
-
-
-
-
-
-    # In[27]:
-
 
     for index, date in enumerate(sorted(pop.date.unique())):
         print(date)
@@ -130,7 +81,6 @@ def main():
         data = pop[pop.date == date]
         data = data[["Inventory", "value"]]
         corr = data.corr()
-        # Draw the heatmap with the mask and correct aspect ratio
         sns.heatmap(corr, annot=True, cbar=False)
         date = pd.to_datetime(date, format="%Y")
         plt.title(f'Correlation of Inventory and Home Value {date.strftime("%Y-%b")}')
@@ -138,24 +88,10 @@ def main():
         plt.tight_layout()
         plt.show()
 
-
-    # In[28]:
-
-
     inv = pd.pivot(pop, index='date', columns='Region', values=['Inventory'])
     inv.columns = inv.columns.get_level_values(1)
     value = pd.pivot(pop, index='date', columns='Region', values=['value'])
     value.columns = value.columns.get_level_values(1)
-    inv.columns
-
-
-    # In[29]:
-
-
-    value
-
-
-    # In[30]:
 
 
     corr = value.corrwith(inv)
@@ -166,8 +102,6 @@ def main():
     plt.title("Inventory Correlation")
     plt.show()
 
-
-    # In[ ]:
 
 
 
