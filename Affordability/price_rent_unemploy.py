@@ -2,15 +2,16 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+import os
 
 
 def county_data(rid,fip):
 
 
 
-	df1 = pd.read_csv('rentals.csv')
+	df1 = pd.read_csv(os.path.join(os.path.dirname(__file__), 'rentals.csv'))
 
-	df2= pd.read_csv('housing.csv')
+	df2= pd.read_csv(os.path.join(os.path.dirname(__file__), 'housing.csv'))
 
 	df_new_1 = df1[df1.RegionID==rid]
 
@@ -79,7 +80,7 @@ def county_data(rid,fip):
 
 
 
-	df_3 = pd.read_csv('new_unemployment.csv')
+	df_3 = pd.read_csv(os.path.join(os.path.dirname(__file__), 'new_unemployment.csv'))
 
 
 	df_new_3 = df_3[df_3.FIPS_Code==fip]
@@ -108,103 +109,104 @@ def county_data(rid,fip):
 
 
 
+def main():
 
-county1= "San Diego, CA"
+    county1= "San Diego, CA"
 
-county2= "San Francisco, CA"
+    county2= "San Francisco, CA"
 
-county3= "Denver, CO"
+    county3= "Denver, CO"
 
-county4= "Boston, MA"
+    county4= "Boston, MA"
 
-county5= "Wichita, KS"
-
-
-rent1, house1, unemployment1= county_data(395056,6073)
-rent2, house2, unemployment2= county_data(395057,6075)
-rent3, house3, unemployment3= county_data(394530,8031)
-rent4, house4, unemployment4= county_data(394404,25025)
-rent5, house5, unemployment5= county_data(395224,20203)
+    county5= "Wichita, KS"
 
 
-
-sns.set_theme() 
-
-
-fig1, axes1= plt.subplots(2,1)
-fig1.suptitle("Rent and House price change over years")
-
-z1=pd.concat({
-    county1: rent1.set_index('date').percent_change_rent, county2: rent2.set_index('date').percent_change_rent, county3: rent3.set_index('date').percent_change_rent,
-    county4: rent4.set_index('date').percent_change_rent, county5: rent5.set_index('date').percent_change_rent 
-}, axis=1).plot.bar(ax=axes1[0])
-
-z1.set_xlabel("Year")
-z1.set_ylabel("Percent change of Rent")
-
-z2=pd.concat({
-    county1: house1.set_index('date').percent_change_price, county2: house2.set_index('date').percent_change_price,county3: house3.set_index('date').percent_change_price,
-    county4: house4.set_index('date').percent_change_price, county5: house5.set_index('date').percent_change_price
-}, axis=1).plot.bar(ax=axes1[1])
-
-z2.set_xlabel("Year")
-z2.set_ylabel("Percent change of House Price")
-
-
-z1.set_xticklabels(z1.get_xticklabels(), rotation=0, ha='right')
-z2.set_xticklabels(z2.get_xticklabels(), rotation=0, ha='right')
-
-
-fig2, axes2= plt.subplots(2,1)
-fig2.suptitle("Rent vs House Price")
-
-
-z1=pd.concat({
-    county1: rent1.set_index('date').mean_rent, county2: rent2.set_index('date').mean_rent, county3: rent3.set_index('date').mean_rent, 
-    county4: rent4.set_index('date').mean_rent, county5: rent5.set_index('date').mean_rent
-}, axis=1).plot.bar(ax=axes2[0])
-
-
-z1.set_xlabel("Year")
-z1.set_ylabel("Mean Rent")
-
-z2=pd.concat({
-    county1: house1.set_index('date').mean_house_price, county2: house2.set_index('date').mean_house_price, county3: house3.set_index('date').mean_house_price,
-    county4: house4.set_index('date').mean_house_price,county5: house5.set_index('date').mean_house_price
-}, axis=1).plot.bar(ax=axes2[1])
-
-z2.set_xlabel("Year")
-z2.set_ylabel("Mean House Price")
+    rent1, house1, unemployment1= county_data(395056,6073)
+    rent2, house2, unemployment2= county_data(395057,6075)
+    rent3, house3, unemployment3= county_data(394530,8031)
+    rent4, house4, unemployment4= county_data(394404,25025)
+    rent5, house5, unemployment5= county_data(395224,20203)
 
 
 
-z1.set_xticklabels(z1.get_xticklabels(), rotation=0, ha='right')
-z2.set_xticklabels(z2.get_xticklabels(), rotation=0, ha='right')
+    sns.set_theme() 
 
 
-fig3, axes3= plt.subplots()
-fig3.suptitle("Price to Annual Rent ratio ")
-z1=pd.concat({
-    county1: house1.set_index('date').price_to_rent_ratio, county2: house2.set_index('date').price_to_rent_ratio, county3: house3.set_index('date').price_to_rent_ratio,
-    county4: house4.set_index('date').price_to_rent_ratio, county5: house5.set_index('date').price_to_rent_ratio
-}, axis=1).plot.bar(ax=axes3)
+    fig1, axes1= plt.subplots(2,1)
+    fig1.suptitle("Rent and House price change over years")
 
-z1.set_ylabel("Price to rent ratio")
+    z1=pd.concat({
+        county1: rent1.set_index('date').percent_change_rent, county2: rent2.set_index('date').percent_change_rent, county3: rent3.set_index('date').percent_change_rent,
+        county4: rent4.set_index('date').percent_change_rent, county5: rent5.set_index('date').percent_change_rent 
+    }, axis=1).plot.bar(ax=axes1[0])
 
+    z1.set_xlabel("Year")
+    z1.set_ylabel("Percent change of Rent")
 
+    z2=pd.concat({
+        county1: house1.set_index('date').percent_change_price, county2: house2.set_index('date').percent_change_price,county3: house3.set_index('date').percent_change_price,
+        county4: house4.set_index('date').percent_change_price, county5: house5.set_index('date').percent_change_price
+    }, axis=1).plot.bar(ax=axes1[1])
 
-
-z1.set_xticklabels(z1.get_xticklabels(), rotation=0, ha='right')
-
-z1=pd.concat({
-    county1: unemployment1.set_index('date').unemployment_rate, county2: unemployment2.set_index('date').unemployment_rate,
-    county3: unemployment3.set_index('date').unemployment_rate, county4: unemployment4.set_index('date').unemployment_rate,
-    county5: unemployment5.set_index('date').unemployment_rate
-}, axis=1).plot.bar()
-
-z1.set_ylabel("Unemployment rate")
-z1.set_xticklabels(z1.get_xticklabels(), rotation=0, ha='right')
+    z2.set_xlabel("Year")
+    z2.set_ylabel("Percent change of House Price")
 
 
+    z1.set_xticklabels(z1.get_xticklabels(), rotation=0, ha='right')
+    z2.set_xticklabels(z2.get_xticklabels(), rotation=0, ha='right')
 
-plt.show()
+
+    fig2, axes2= plt.subplots(2,1)
+    fig2.suptitle("Rent vs House Price")
+
+
+    z1=pd.concat({
+        county1: rent1.set_index('date').mean_rent, county2: rent2.set_index('date').mean_rent, county3: rent3.set_index('date').mean_rent, 
+        county4: rent4.set_index('date').mean_rent, county5: rent5.set_index('date').mean_rent
+    }, axis=1).plot.bar(ax=axes2[0])
+
+
+    z1.set_xlabel("Year")
+    z1.set_ylabel("Mean Rent")
+
+    z2=pd.concat({
+        county1: house1.set_index('date').mean_house_price, county2: house2.set_index('date').mean_house_price, county3: house3.set_index('date').mean_house_price,
+        county4: house4.set_index('date').mean_house_price,county5: house5.set_index('date').mean_house_price
+    }, axis=1).plot.bar(ax=axes2[1])
+
+    z2.set_xlabel("Year")
+    z2.set_ylabel("Mean House Price")
+
+
+
+    z1.set_xticklabels(z1.get_xticklabels(), rotation=0, ha='right')
+    z2.set_xticklabels(z2.get_xticklabels(), rotation=0, ha='right')
+
+
+    fig3, axes3= plt.subplots()
+    fig3.suptitle("Price to Annual Rent ratio ")
+    z1=pd.concat({
+        county1: house1.set_index('date').price_to_rent_ratio, county2: house2.set_index('date').price_to_rent_ratio, county3: house3.set_index('date').price_to_rent_ratio,
+        county4: house4.set_index('date').price_to_rent_ratio, county5: house5.set_index('date').price_to_rent_ratio
+    }, axis=1).plot.bar(ax=axes3)
+
+    z1.set_ylabel("Price to rent ratio")
+
+
+
+
+    z1.set_xticklabels(z1.get_xticklabels(), rotation=0, ha='right')
+
+    z1=pd.concat({
+        county1: unemployment1.set_index('date').unemployment_rate, county2: unemployment2.set_index('date').unemployment_rate,
+        county3: unemployment3.set_index('date').unemployment_rate, county4: unemployment4.set_index('date').unemployment_rate,
+        county5: unemployment5.set_index('date').unemployment_rate
+    }, axis=1).plot.bar()
+
+    z1.set_ylabel("Unemployment rate")
+    z1.set_xticklabels(z1.get_xticklabels(), rotation=0, ha='right')
+
+
+
+    plt.show()

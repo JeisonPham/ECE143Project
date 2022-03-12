@@ -2,15 +2,16 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import numpy as np
+import os
 
 
 def county_data(rid,fip):
 
 
 
-	df1 = pd.read_csv('rentals.csv')
+	df1 = pd.read_csv(os.path.join(os.path.dirname(__file__), 'rentals.csv'))
 
-	df2= pd.read_csv('housing.csv')
+	df2= pd.read_csv(os.path.join(os.path.dirname(__file__), 'housing.csv'))
 
 	df_new_1 = df1[df1.RegionID==rid]
 
@@ -79,7 +80,7 @@ def county_data(rid,fip):
 
 
 
-	df_3 = pd.read_csv('new_unemployment.csv')
+	df_3 = pd.read_csv(os.path.join(os.path.dirname(__file__), 'new_unemployment.csv'))
 
 
 	df_new_3 = df_3[df_3.FIPS_Code==fip]
@@ -108,25 +109,26 @@ def county_data(rid,fip):
 
 
 
+def main():
 
-county1= "Los Angeles, CA"
+    county1= "Los Angeles, CA"
 
-county2= "Ventura, CA"
+    county2= "Ventura, CA"
 
-county3= "St. Louis, MO"
+    county3= "St. Louis, MO"
 
-county4= "New York, NY"
-
-
-
-rent1, house1, unemployment1= county_data(753899,6037)
-rent2, house2, unemployment2= county_data(394952,6111)
-rent3, house3, unemployment3= county_data(395121,27137)
-rent4, house4, unemployment4= county_data(394913,36061)
+    county4= "New York, NY"
 
 
-print(county1,"\n",rent1,"\n", house1,"\n", unemployment1 )
-print(county2,"\n",rent2,"\n", house2,"\n", unemployment2 )
-print(county3,"\n",rent3,"\n", house3,"\n", unemployment3 )
-print(county4,"\n",rent4,"\n", house4,"\n", unemployment4 )
+
+    rent1, house1, unemployment1= county_data(753899,6037)
+    rent2, house2, unemployment2= county_data(394952,6111)
+    rent3, house3, unemployment3= county_data(395121,27137)
+    rent4, house4, unemployment4= county_data(394913,36061)
+
+
+    print(county1,"\n",rent1,"\n", house1,"\n", unemployment1 )
+    print(county2,"\n",rent2,"\n", house2,"\n", unemployment2 )
+    print(county3,"\n",rent3,"\n", house3,"\n", unemployment3 )
+    print(county4,"\n",rent4,"\n", house4,"\n", unemployment4 )
 
